@@ -9,6 +9,7 @@ function App() {
   const [particleColor, setParticleColor] = useState("#ffffff");
   const [particleSize, setParticleSize] = useState(10);
   const [backgroundColor, setBackgroundColor] = useState("#0d1117");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSnowPreset(engine);
@@ -16,7 +17,7 @@ function App() {
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100vh" }}>
-      <div style={{ flex: 2, position: "relative", overflow: "hidden" }}>
+      <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
         <Particles
           id="tsparticles"
           init={particlesInit}
@@ -65,21 +66,44 @@ function App() {
           }}
           style={{ position: "absolute", inset: 0 }}
         />
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            zIndex: 10,
+            padding: "12px 20px",
+            background: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            border: "2px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontSize: "16px",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          {sidebarOpen ? "Hide Controls" : "Show Controls"}
+        </button>
       </div>
       <div
         style={{
-          flex: 1,
+          width: sidebarOpen ? "350px" : "0",
           position: "relative",
           zIndex: 1,
           color: "white",
-          padding: "30px 20px",
+          padding: sidebarOpen ? "30px 20px" : "0",
           background: "rgba(0, 0, 0, 0.6)",
           backdropFilter: "blur(8px)",
           overflowY: "auto",
+          overflowX: "hidden",
+          transition: "width 0.3s ease, padding 0.3s ease",
         }}
       >
-        <h1 style={{ marginBottom: "20px" }}>ViSnowlizer</h1>
-        <h2 style={{ marginBottom: "20px", fontSize: "1.25em" }}>Snow Controls</h2>
+        {sidebarOpen && (
+          <>
+            <h1 style={{ marginBottom: "20px" }}>ViSnowlizer</h1>
+            <h2 style={{ marginBottom: "20px", fontSize: "1.25em" }}>Snow Controls</h2>
 
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "block", marginBottom: "8px" }}>
@@ -147,6 +171,8 @@ function App() {
             style={{ width: "100%", height: "40px", cursor: "pointer" }}
           />
         </div>
+          </>
+        )}
       </div>
     </div>
   );
