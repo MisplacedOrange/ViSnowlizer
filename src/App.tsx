@@ -5,7 +5,7 @@ import { loadSnowPreset } from "tsparticles-preset-snow";
 
 function App() {
   const particlesInit = useCallback(async (engine: Engine) => {
-    // Load the snow preset
+    
     await loadSnowPreset(engine);
   }, []);
 
