@@ -107,44 +107,68 @@ function App() {
 
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "block", marginBottom: "8px" }}>
-            Particle Count: {particleCount}
+            Particle Count
           </label>
           <input
-            type="range"
+            type="number"
             min="10"
             max="200"
             value={particleCount}
             onChange={(e) => setParticleCount(Number(e.target.value))}
-            style={{ width: "100%" }}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "block", marginBottom: "8px" }}>
-            Fall Speed: {fallSpeed}
+            Fall Speed
           </label>
           <input
-            type="range"
+            type="number"
             min="1"
             max="10"
             step="0.5"
             value={fallSpeed}
             onChange={(e) => setFallSpeed(Number(e.target.value))}
-            style={{ width: "100%" }}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "block", marginBottom: "8px" }}>
-            Particle Size: {particleSize}
+            Particle Size
           </label>
           <input
-            type="range"
+            type="number"
             min="5"
             max="30"
             value={particleSize}
             onChange={(e) => setParticleSize(Number(e.target.value))}
-            style={{ width: "100%" }}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
           />
         </div>
 
