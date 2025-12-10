@@ -10,6 +10,12 @@ function App() {
   const [particleSize, setParticleSize] = useState(10);
   const [backgroundColor, setBackgroundColor] = useState("#0d1117");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [opacityMin, setOpacityMin] = useState(0.3);
+  const [opacityMax, setOpacityMax] = useState(0.8);
+  const [wobbleDistance, setWobbleDistance] = useState(10);
+  const [wobbleSpeed, setWobbleSpeed] = useState(10);
+  const [densityArea, setDensityArea] = useState(800);
+  const [direction, setDirection] = useState("bottom");
 
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSnowPreset(engine);
@@ -32,7 +38,7 @@ function App() {
                 value: particleCount,
                 density: {
                   enable: true,
-                  area: 800,
+                  area: densityArea,
                 },
               },
               color: {
@@ -42,7 +48,7 @@ function App() {
                 type: "circle",
               },
               opacity: {
-                value: { min: 0.3, max: 0.8 },
+                value: { min: opacityMin, max: opacityMax },
               },
               size: {
                 value: { min: 1, max: particleSize },
@@ -50,7 +56,7 @@ function App() {
               move: {
                 enable: true,
                 speed: fallSpeed,
-                direction: "bottom",
+                direction: direction as any,
                 random: true,
                 straight: false,
                 outModes: {
@@ -59,8 +65,8 @@ function App() {
               },
               wobble: {
                 enable: true,
-                distance: 10,
-                speed: 10,
+                distance: wobbleDistance,
+                speed: wobbleSpeed,
               },
             },
           }}
@@ -194,6 +200,145 @@ function App() {
             onChange={(e) => setBackgroundColor(e.target.value)}
             style={{ width: "100%", height: "40px", cursor: "pointer" }}
           />
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Opacity Min
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="1"
+            step="0.1"
+            value={opacityMin}
+            onChange={(e) => setOpacityMin(Number(e.target.value))}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Opacity Max
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="1"
+            step="0.1"
+            value={opacityMax}
+            onChange={(e) => setOpacityMax(Number(e.target.value))}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Wobble Distance
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="50"
+            value={wobbleDistance}
+            onChange={(e) => setWobbleDistance(Number(e.target.value))}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Wobble Speed
+          </label>
+          <input
+            type="number"
+            min="1"
+            max="50"
+            value={wobbleSpeed}
+            onChange={(e) => setWobbleSpeed(Number(e.target.value))}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Density Area
+          </label>
+          <input
+            type="number"
+            min="100"
+            max="2000"
+            step="100"
+            value={densityArea}
+            onChange={(e) => setDensityArea(Number(e.target.value))}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px"
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Direction
+          </label>
+          <select
+            value={direction}
+            onChange={(e) => setDirection(e.target.value)}
+            style={{ 
+              width: "100%",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "4px",
+              color: "white",
+              fontSize: "16px",
+              cursor: "pointer"
+            }}
+          >
+            <option value="bottom" style={{ background: "#1a1a1a" }}>Bottom</option>
+            <option value="top" style={{ background: "#1a1a1a" }}>Top</option>
+            <option value="left" style={{ background: "#1a1a1a" }}>Left</option>
+            <option value="right" style={{ background: "#1a1a1a" }}>Right</option>
+            <option value="none" style={{ background: "#1a1a1a" }}>Random</option>
+          </select>
         </div>
           </>
         )}
