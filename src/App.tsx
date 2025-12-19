@@ -4,18 +4,18 @@ import type { Engine } from "tsparticles-engine";
 import { loadSnowPreset } from "tsparticles-preset-snow";
 
 function App() {
-  const [particleCount, setParticleCount] = useState(50);
-  const [fallSpeed, setFallSpeed] = useState(3);
+  const [crystalDensity, setCrystalDensity] = useState(50);
+  const [terminalVelocity, setTerminalVelocity] = useState(3);
   const [particleColor, setParticleColor] = useState("#ffffff");
-  const [particleSize, setParticleSize] = useState(10);
+  const [crystalDiameter, setCrystalDiameter] = useState(10);
   const [backgroundColor, setBackgroundColor] = useState("#0d1117");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [opacityMin, setOpacityMin] = useState(0.3);
-  const [opacityMax, setOpacityMax] = useState(0.8);
-  const [wobbleDistance, setWobbleDistance] = useState(10);
-  const [wobbleSpeed, setWobbleSpeed] = useState(10);
-  const [densityArea, setDensityArea] = useState(800);
-  const [direction, setDirection] = useState("bottom");
+  const [humidityMin, setHumidityMin] = useState(0.3);
+  const [humidityMax, setHumidityMax] = useState(0.8);
+  const [windTurbulence, setWindTurbulence] = useState(10);
+  const [airResistance, setAirResistance] = useState(10);
+  const [nucleationRate, setNucleationRate] = useState(800);
+  const [atmosphericFlow, setAtmosphericFlow] = useState("bottom");
 
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSnowPreset(engine);
@@ -35,10 +35,10 @@ function App() {
             },
             particles: {
               number: {
-                value: particleCount,
+                value: crystalDensity,
                 density: {
                   enable: true,
-                  area: densityArea,
+                  area: nucleationRate,
                 },
               },
               color: {
@@ -48,15 +48,15 @@ function App() {
                 type: "circle",
               },
               opacity: {
-                value: { min: opacityMin, max: opacityMax },
+                value: { min: humidityMin, max: humidityMax },
               },
               size: {
-                value: { min: 1, max: particleSize },
+                value: { min: 1, max: crystalDiameter },
               },
               move: {
                 enable: true,
-                speed: fallSpeed,
-                direction: direction as any,
+                speed: terminalVelocity,
+                direction: atmosphericFlow as any,
                 random: true,
                 straight: false,
                 outModes: {
@@ -65,32 +65,13 @@ function App() {
               },
               wobble: {
                 enable: true,
-                distance: wobbleDistance,
-                speed: wobbleSpeed,
+                distance: windTurbulence,
+                speed: airResistance,
               },
             },
           }}
           style={{ position: "absolute", inset: 0 }}
         />
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          style={{
-            position: "absolute",
-            top: "20px",
-            right: "20px",
-            zIndex: 10,
-            padding: "12px 20px",
-            background: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            border: "2px solid rgba(255, 255, 255, 0.3)",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "16px",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          {sidebarOpen ? "Hide Controls" : "Show Controls"}
-        </button>
       </div>
       <div
         style={{
@@ -98,239 +79,407 @@ function App() {
           position: "relative",
           zIndex: 1,
           color: "white",
-          padding: sidebarOpen ? "30px 20px" : "0",
-          background: "rgba(0, 0, 0, 0.6)",
-          backdropFilter: "blur(8px)",
+          padding: sidebarOpen ? "0" : "0",
+          background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)",
+          backdropFilter: "blur(20px)",
+          borderLeft: sidebarOpen ? "1px solid rgba(148, 163, 184, 0.2)" : "none",
+          boxShadow: sidebarOpen ? "-10px 0 40px rgba(0, 0, 0, 0.5)" : "none",
           overflowY: "auto",
           overflowX: "hidden",
-          transition: "width 0.3s ease, padding 0.3s ease",
+          transition: "all 0.3s ease",
         }}
       >
+        {!sidebarOpen && (
+          <button
+            onClick={() => setSidebarOpen(true)}
+            style={{
+              position: "fixed",
+              top: "20px",
+              right: "20px",
+              zIndex: 10,
+              padding: "12px 20px",
+              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)",
+              color: "white",
+              border: "1px solid rgba(148, 163, 184, 0.2)",
+              borderRadius: "3px",
+              cursor: "pointer",
+              fontSize: "14px",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+              transition: "all 0.2s ease",
+              fontWeight: "500",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.95) 100%)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)";
+            }}
+          >
+            Show Controls
+          </button>
+        )}
         {sidebarOpen && (
           <>
-            <h1 style={{ marginBottom: "20px" }}>ViSnowlizer</h1>
-            <h2 style={{ marginBottom: "20px", fontSize: "1.25em" }}>Snow Controls</h2>
+            <div style={{
+              padding: "30px 20px 20px",
+              borderBottom: "1px solid rgba(148, 163, 184, 0.2)",
+              background: "rgba(0, 0, 0, 0.2)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}>
+              <div>
+                <h1 style={{ 
+                  marginBottom: "8px", 
+                  fontSize: "1.8em",
+                  background: "linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontWeight: "700",
+                }}>ViSnowlizer</h1>
+                <h2 style={{ 
+                  marginBottom: "0", 
+                  fontSize: "0.9em",
+                  color: "rgba(148, 163, 184, 0.8)",
+                  fontWeight: "400",
+                  letterSpacing: "0.5px",
+                }}>Snow Crystal Controls</h2>
+              </div>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                style={{
+                  padding: "8px 12px",
+                  background: "rgba(15, 23, 42, 0.6)",
+                  color: "rgba(203, 213, 225, 0.9)",
+                  border: "1px solid rgba(148, 163, 184, 0.3)",
+                  borderRadius: "3px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(30, 41, 59, 0.8)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(15, 23, 42, 0.6)";
+                }}
+              >
+                Hide
+              </button>
+            </div>
+            <div style={{ padding: "20px" }}>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Particle Count
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Crystal Density
           </label>
           <input
             type="number"
             min="10"
             max="200"
-            value={particleCount}
-            onChange={(e) => setParticleCount(Number(e.target.value))}
+            value={crystalDensity}
+            onChange={(e) => setCrystalDensity(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Fall Speed
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Terminal Velocity
           </label>
           <input
             type="number"
             min="1"
             max="10"
             step="0.5"
-            value={fallSpeed}
-            onChange={(e) => setFallSpeed(Number(e.target.value))}
+            value={terminalVelocity}
+            onChange={(e) => setTerminalVelocity(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Particle Size
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Crystal Diameter
           </label>
           <input
             type="number"
             min="5"
             max="30"
-            value={particleSize}
-            onChange={(e) => setParticleSize(Number(e.target.value))}
+            value={crystalDiameter}
+            onChange={(e) => setCrystalDiameter(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
             Particle Color
           </label>
           <input
             type="color"
             value={particleColor}
             onChange={(e) => setParticleColor(e.target.value)}
-            style={{ width: "100%", height: "40px", cursor: "pointer" }}
+            style={{ 
+              width: "100%", 
+              height: "45px", 
+              cursor: "pointer",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
+            }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
             Background Color
           </label>
           <input
             type="color"
             value={backgroundColor}
             onChange={(e) => setBackgroundColor(e.target.value)}
-            style={{ width: "100%", height: "40px", cursor: "pointer" }}
+            style={{ 
+              width: "100%", 
+              height: "45px", 
+              cursor: "pointer",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
+            }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Opacity Min
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Humidity (Min)
           </label>
           <input
             type="number"
             min="0"
             max="1"
             step="0.1"
-            value={opacityMin}
-            onChange={(e) => setOpacityMin(Number(e.target.value))}
+            value={humidityMin}
+            onChange={(e) => setHumidityMin(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Opacity Max
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Humidity (Max)
           </label>
           <input
             type="number"
             min="0"
             max="1"
             step="0.1"
-            value={opacityMax}
-            onChange={(e) => setOpacityMax(Number(e.target.value))}
+            value={humidityMax}
+            onChange={(e) => setHumidityMax(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Wobble Distance
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Wind Turbulence
           </label>
           <input
             type="number"
             min="0"
             max="50"
-            value={wobbleDistance}
-            onChange={(e) => setWobbleDistance(Number(e.target.value))}
+            value={windTurbulence}
+            onChange={(e) => setWindTurbulence(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Wobble Speed
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Air Resistance
           </label>
           <input
             type="number"
             min="1"
             max="50"
-            value={wobbleSpeed}
-            onChange={(e) => setWobbleSpeed(Number(e.target.value))}
+            value={airResistance}
+            onChange={(e) => setAirResistance(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Density Area
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Nucleation Rate
           </label>
           <input
             type="number"
             min="100"
             max="2000"
             step="100"
-            value={densityArea}
-            onChange={(e) => setDensityArea(Number(e.target.value))}
+            value={nucleationRate}
+            onChange={(e) => setNucleationRate(Number(e.target.value))}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px"
+              fontSize: "15px",
+              transition: "all 0.2s ease",
             }}
           />
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "8px" }}>
-            Direction
+          <label style={{ 
+            display: "block", 
+            marginBottom: "8px",
+            fontSize: "0.9em",
+            color: "rgba(203, 213, 225, 0.9)",
+            fontWeight: "500",
+          }}>
+            Atmospheric Flow
           </label>
           <select
-            value={direction}
-            onChange={(e) => setDirection(e.target.value)}
+            value={atmosphericFlow}
+            onChange={(e) => setAtmosphericFlow(e.target.value)}
             style={{ 
               width: "100%",
-              padding: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              borderRadius: "4px",
+              padding: "10px",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              borderRadius: "3px",
               color: "white",
-              fontSize: "16px",
-              cursor: "pointer"
+              fontSize: "15px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
             }}
           >
             <option value="bottom" style={{ background: "#1a1a1a" }}>Bottom</option>
@@ -340,6 +489,7 @@ function App() {
             <option value="none" style={{ background: "#1a1a1a" }}>Random</option>
           </select>
         </div>
+            </div>
           </>
         )}
       </div>
